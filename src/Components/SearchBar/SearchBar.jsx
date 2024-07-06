@@ -1,20 +1,23 @@
+import { Formik, Field, Form } from 'formik';
 export default function SearchBar({ onSearch }) {
-  const handleInputChange = event => {
-    event.preventDefault();
-    onSearch(event.target.value);
-    console.log(event.target.value);
-  };
-
   return (
     <header>
-      <form>
-        <input
-          type="text"
-          placeholder="Search images and photos"
-          onChange={handleInputChange}
-        />
-        <button type="submit">Search</button>
-      </form>
+      <Formik
+        initialValues={{ query: ''}}
+        onSubmit={(values, actions) => {
+          onSearch(values.query);
+          actions.resetForm();
+        }}
+      >
+        <Form>
+          <Field
+            type="text"
+            name="query"
+            placeholder="Search images and photos"
+          />
+          <button type="submit">Search</button>
+        </Form>
+      </Formik>
     </header>
   );
 }
