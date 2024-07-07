@@ -1,14 +1,13 @@
 import { fetchImages } from './articles-api';
 import { useState, useEffect } from 'react';
-import SearchBar from './Components/SearchBar/SearchBar';
-import ImageGallery from './Components/ImageGallery/ImageGallery';
-import LoadMoreBtn from './Components/LoadMoreBtn/LoadMoreBtn';
-import ErrorMessage from './Components/ErrorMessage/ErrorMessage';
-import Loader from './Components/Loader/Loader';
-import ImageModal from './Components/ImageModal/ImageModal';
+import SearchBar from './components/SearchBar/SearchBar';
+import ImageGallery from './components/ImageGallery/ImageGallery';
+import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
+import Loader from './components/Loader/Loader';
+import ImageModal from './components/ImageModal/ImageModal';
 import Modal from 'react-modal';
 import toast, { Toaster } from 'react-hot-toast';
-import './App.css';
 
 Modal.setAppElement('#root');
 
@@ -58,13 +57,11 @@ function App() {
   const openModal = image => {
     setSelectedImage(image);
     setModalIsOpen(true);
-    document.body.classList.add('modal-open');
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
     setSelectedImage(null);
-    document.body.classList.remove('modal-open');
   };
 
   return (
