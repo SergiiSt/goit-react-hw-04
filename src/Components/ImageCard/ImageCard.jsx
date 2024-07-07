@@ -1,12 +1,7 @@
-export default function ImageCard({
-  image: {
-    alt_description,
-    urls: { small },
-  },
-}) {
+export default function ImageCard({ image, openModal }) {
   return (
-    <div>
-      <img src={small} alt={alt_description} />
+    <div onClick={() => openModal(image)}>
+      <img src={image.urls.small} alt={image.alt_description} />
     </div>
   );
 }

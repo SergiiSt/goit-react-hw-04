@@ -10,10 +10,9 @@ export const fetchImages = async (query, currentPage) => {
       client_id: API_KEY,
       query: query,
       page: currentPage,
-      per_page: 20,
-      orientation: 'squarish',
+      per_page: 10,
+      orientation: 'landscape',
     },
   });
-//   console.log(response.data.results);
   return response.data.results;
 };

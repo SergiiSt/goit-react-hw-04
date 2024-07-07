@@ -1,88 +1,83 @@
 import { fetchImages } from './articles-api';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchBar from './Components/SearchBar/SearchBar';
-import ImageGallery from './ImageGallery/ImageGallery';
-import { Audio } from 'react-loader-spinner';
+import ImageGallery from './Components/ImageGallery/ImageGallery';
+import LoadMoreBtn from './Components/LoadMoreBtn/LoadMoreBtn';
+import ErrorMessage from './Components/ErrorMessage/ErrorMessage';
+import Loader from './Components/Loader/Loader';
+import ImageModal from './Components/ImageModal/ImageModal';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 function App() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  // useEffect(() => {
-  //   async function getImages() {
-  //     try {
-  //       setLoading(true);
-  //       const data = await fetchImages('dog', 3);
-  //       setImages(data);
-  //     } catch (error) {
-  //       setError(true);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  //   getImages();
-  // }, []);
   const handleSearch = async newQery => {
-    try {
-      setLoading(true);
-      setImages([]);
-      setError(false );
-      const data = await fetchImages(newQery, 1);
-      setImages(data);
-    } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+    setImages([]);
+    setPage(1);
+    setQuery(newQery);
   };
-  // console.log(images);
+  const handleLoadMore = () => {
+    setPage(page + 1);
+  };
+
+  useEffect(() => {
+    if (!query) {
+      return;
+    }
+    async function getImages() {
+      try {
+        setLoading(true);
+        setError(false);
+        const data = await fetchImages(query, page);
+        setImages(prevImages => {
+          return [...prevImages, ...data];
+        });
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    getImages();
+  }, [page, query]);
+
+  const openModal = image => {
+    setSelectedImage(image);
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setSelectedImage(null);
+  };
+
   return (
     <>
       <SearchBar onSearch={handleSearch} />
-      {loading && <Audio />}
-      {error && <p>Something went wrong, reload this page</p>}
-      {images.length > 0 && <ImageGallery images={images} />}
+      {error && <ErrorMessage />}
+      {images.length > 0 && (
+        <ImageGallery openModal={openModal} images={images} />
+      )}
+      {loading && <Loader />}
+      {images.length > 0 && !loading && (
+        <LoadMoreBtn onClick={handleLoadMore} />
+      )}
+
+      <ImageModal
+        modalIsOpen={modalIsOpen}
+        closeModal={closeModal}
+        selectedImage={selectedImage}
+      />
     </>
   );
 }
-// const [articles, setArticles] = useState([]);
-// const [loading, setLoading] = useState(false);
-// const [error, setError] = useState(false);
-// const [page, setPage] = useState(1);
-// const [topic, setTopic] = useState("");
-// const [totalPages, setTotalPages] = useState(999);
 
-// const handleSearch = async (newTopic) => {
-//   setArticles([]);
-//   setPage(1);
-//   setTopic(newTopic);
-// };
-
-// const handleLoadMore = () => {
-//   setPage(page + 1);
-// };
-
-// useEffect(() => {
-//   if (topic === "") {
-//     return;
-//   }
-
-//   async function getArticles() {
-//     try {
-//       setLoading(true);
-//       setError(false);
-//       const data = await fetchArticles(topic, page);
-//       setTotalPages(data.nbPages);
-//       setArticles((prevArticles) => {
-//         return [...prevArticles, ...data];
-//       });
-//     } catch (error) {
-//       setError(true);
-//     } finally {
-//       setLoading(false);
-//     }
-//   }
-//   getArticles();
-// }, [page, topic]);
 export default App;
