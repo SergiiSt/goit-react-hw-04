@@ -7,6 +7,8 @@ import ErrorMessage from './Components/ErrorMessage/ErrorMessage';
 import Loader from './Components/Loader/Loader';
 import ImageModal from './Components/ImageModal/ImageModal';
 import Modal from 'react-modal';
+import toast, { Toaster } from 'react-hot-toast';
+import './App.css';
 
 Modal.setAppElement('#root');
 
@@ -20,6 +22,10 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleSearch = async newQery => {
+    if (query === ' ') {
+      toast.error('Search field should not be empty');
+      return;
+    }
     setImages([]);
     setPage(1);
     setQuery(newQery);
@@ -52,11 +58,13 @@ function App() {
   const openModal = image => {
     setSelectedImage(image);
     setModalIsOpen(true);
+    document.body.classList.add('modal-open');
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
     setSelectedImage(null);
+    document.body.classList.remove('modal-open');
   };
 
   return (
@@ -76,6 +84,7 @@ function App() {
         closeModal={closeModal}
         selectedImage={selectedImage}
       />
+      <Toaster />
     </>
   );
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = 'blZFH9Tz4Q-h5YC5EMFp0R2pxBsKnM79zm45k7hzITY';
+const API_KEY = 'ZcvUdgJ28SIFN8RIVuvAw9y-Ova2pkgU9-fdbjKp92g';
 
 axios.defaults.baseURL = 'https://api.unsplash.com/';
 
@@ -10,7 +10,7 @@ export const fetchImages = async (query, currentPage) => {
       client_id: API_KEY,
       query: query,
       page: currentPage,
-      per_page: 10,
+      per_page: 9,
       orientation: 'landscape',
     },
   });

@@ -1,0 +1,10 @@
+.listWrap {
+  margin-left: 47px;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
